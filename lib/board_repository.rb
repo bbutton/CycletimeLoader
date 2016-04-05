@@ -10,12 +10,26 @@ class BoardRepository
   end
 
   def find_board_to_load
-    results = @client.query("select board_id from boards where start_time is null and end_time is null")
-    results.each { |r| puts "Result: #{r}" }
-    results.first()["board_id"]
+    @client.query("START TRANSACTION")
+    results = @client.query("select board_id from boards where interrupted = 'Y' or (start_time is NULL and end_time is NULL) order by id limit 1")
+
+    if results.first == nil
+      @client.query("commit")
+      return nil
+    end
+
+    board_id = results.first["board_id"]
+    @client.query("update boards set start_time = UTC_TIMESTAMP(), interrupted = null where board_id = '" + board_id + "'")
+    @client.query("commit")
+
+    board_id
   end
 
-  def complete_updating(board_id_to_load)
+  def complete_updating(board_id)
+    @client.query("update boards set end_time = UTC_TIMESTAMP() where board_id = '" + board_id + "'")
+  end
 
+  def set_interrupted(board_id)
+    @client.query("update boards set interrupted = 'Y' where board_id = '" + board_id + "'")
   end
 end
