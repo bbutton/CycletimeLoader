@@ -12,7 +12,7 @@ class MetricsRepository
     trello_data = app[@orchestrate_collection]
 
     metrics_data.each do |data|
-        trello_data << data
+      trello_data.set(data[:id], data)
     end
   end
 end
