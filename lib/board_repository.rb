@@ -10,7 +10,7 @@ class BoardRepository
   end
 
   def find_board_to_load
-    results = @client.query("select board_id from boards")
+    results = @client.query("select board_id from boards where start_time is null and end_time is null")
     results.each { |r| puts "Result: #{r}" }
     results.first()["board_id"]
   end
