@@ -46,6 +46,7 @@ board_id_to_load = nil
 loop do
   begin
     puts "Beginning polling cycle in 10 seconds"
+    STDOUT.flush
     sleep(10)
 
     puts("Checking for any boards to load")
