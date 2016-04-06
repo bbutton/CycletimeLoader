@@ -2,15 +2,9 @@
 applications:
 - name: cycletime_loader
   no-route: true
-  command: ruby main.rb
-  env:
-    ORCHESTRATE_API_KEY:
-    ORCHESTRATE_ENDPOINT: https://api.orchestrate.io
-    ORCHESTRATE_COLLECTION: Ctl_Lean_Metrics
-    TRELLO_TOKEN:
-    TRELLO_DEV_KEY:
-    DB_HOST: aatc-demo.il1.rdbs.ctl.io
-    DB_PORT: 49964
-    DB_USER: bbutton-aatc
-    DB_PASSWORD: 
-    DB_NAME: AATC-Demo
+  command: bundler exec ruby main.rb
+  health-check-type: none
+  services:
+    - aatc_demo_db
+    - orchestrate_demo_db
+    - trello_aatc_service
