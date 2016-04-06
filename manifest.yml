@@ -4,6 +4,7 @@ applications:
   no-route: true
   command: bundler exec ruby main.rb
   health-check-type: none
+  memory: 128M
   services:
     - aatc_demo_db
     - orchestrate_demo_db
