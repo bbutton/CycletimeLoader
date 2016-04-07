@@ -2,5 +2,4 @@
 .idea/
 Gemfile.lock
 config_data.txt
-manifest.yml
 *.txt
