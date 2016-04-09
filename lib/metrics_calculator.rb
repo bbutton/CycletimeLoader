@@ -31,6 +31,7 @@ class MetricsCalculator
       }
 
       puts "#{cycletime_metric}"
+      STDOUT.flush
 
       cycletime_metric
     end

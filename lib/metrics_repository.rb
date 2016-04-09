@@ -12,6 +12,9 @@ class MetricsRepository
     trello_data = app[@orchestrate_collection]
 
     metrics_data.each do |data|
+      puts "Storing #{data}"
+      STDOUT.flush
+      
       trello_data.set(data[:id], data)
     end
   end

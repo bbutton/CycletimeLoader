@@ -22,6 +22,8 @@ class BoardDataRepository
       working_count = actions.count{ |a| a.data["listAfter"] && a.data["listAfter"]["name"] == "Working" }
       complete_count = actions.count{ |a| a.data["listAfter"] && a.data["listAfter"]["name"] == "Complete" }
       puts "#{card.name}: Working: #{working_count}, Complete: #{complete_count}"
+      STDOUT.flush
+
       i += 1
       if(i == 20) # Rate limiting :(
         puts "Hack for trello rate limiting..."
