@@ -43,6 +43,14 @@ metrics_calculator = MetricsCalculator.new
 metrics_repository = MetricsRepository.new(orchestrate_api_key, orchestrate_collection, orchestrate_endpoint)
 
 board_id_to_load = nil
+Signal.trap("TERM") {
+  puts "Shutting down instance #{ENV["INSTANCE_ID}"]} on SIGTERM"
+
+  board_repository.set_interrupted(board_id_to_load) if board_id !- nil
+
+  exit(0)
+}
+
 loop do
   begin
     puts "Beginning polling cycle in 10 seconds"
