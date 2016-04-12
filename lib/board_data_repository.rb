@@ -13,7 +13,7 @@ class BoardDataRepository
 
   def get_board_data(board_id_to_load)
     board = Trello::Board.find(board_id_to_load)
-    all_cards = board.cards(:filter => 'open')
+    all_cards = board.cards(:filter => 'all')
     puts "#{all_cards.count} total cards found for #{board_id_to_load}"
 
     i = 0
