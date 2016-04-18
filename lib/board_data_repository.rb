@@ -1,4 +1,5 @@
 require 'trello'
+require_relative '../lib/metrics_card'
 
 class BoardDataRepository
   def initialize(trello_dev_key, trello_token)
@@ -13,11 +14,12 @@ class BoardDataRepository
 
   def get_board_data(board_id_to_load)
     board = Trello::Board.find(board_id_to_load)
+
     all_cards = board.cards(:filter => 'all')
     puts "#{all_cards.count} total cards found for #{board_id_to_load}"
 
     i = 0
-    completed_cards = all_cards.select do |card|
+    completed_cards = all_cards.collect do |card|
       actions = card.actions
       working_count = actions.count{ |a| a.data["listAfter"] && a.data["listAfter"]["name"] == "Working" }
       complete_count = actions.count{ |a| a.data["listAfter"] && a.data["listAfter"]["name"] == "Complete" }
@@ -31,8 +33,14 @@ class BoardDataRepository
         i = 0
       end
 
-      working_count > 0 && complete_count > 0
+      if working_count > 0 && complete_count > 0
+        MetricsCard.new(card, board.name, actions)
+      else
+        nil
+      end
     end
+
+    completed_cards = completed_cards.select { |c| c != nil }
 
     puts "#{completed_cards.count} cards completed."
 

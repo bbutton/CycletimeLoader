@@ -1,9 +1,12 @@
+require_relative '../lib/metrics_card'
+
 class MetricsCalculator
   def calculate_cycletime(board_data)
     cycletime_data = board_data.collect do |card|
-      name = card.name
-      id = card.id
+      name = card.card_name
+      id = card.card_id
       board_id = card.board_id
+      board_name = card.board_name
 
       starting_actions = card.actions.select{|a| a.data["listAfter"] && a.data["listAfter"]["name"] == "Working"}
       starting_timestamp = starting_actions.sort{ |l, r| l.date <=> r.date }.last.date
@@ -12,7 +15,7 @@ class MetricsCalculator
       ending_timestamp = ending_actions.sort{ |l, r| l.date <=> r.date }.last.date
 
       estimate = 9999
-      card.card_labels.each do |label|
+      card.labels.each do |label|
         regex = /^([0-9])/
         result = regex.match(label["name"])
         estimate = result[1] unless result == nil
@@ -24,6 +27,7 @@ class MetricsCalculator
           id: id,
           name: name,
           board_id: board_id,
+          board_name: board_name,
           estimate: estimate,
           cycle_time: cycle_time,
           start_time: starting_timestamp,
