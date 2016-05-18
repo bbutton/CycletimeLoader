@@ -38,9 +38,6 @@ if(ENV["VCAP_SERVICES"] != nil)
 end
 
 board_repository = BoardRepository.new(db_host, db_port, db_user, db_password, db_name)
-board_data_repository = BoardDataRepository.new(trello_dev_key, trello_token)
-metrics_calculator = MetricsCalculator.new
-metrics_repository = MetricsRepository.new(orchestrate_api_key, orchestrate_collection, orchestrate_endpoint)
 
 board_id_to_load = nil
 Signal.trap("TERM") {
@@ -61,13 +58,17 @@ loop do
     board_id_to_load = board_repository.find_board_to_load
     next if board_id_to_load == nil
 
+
     puts("Retrieving board data for #{board_id_to_load}")
+    board_data_repository = BoardDataRepository.new(trello_dev_key, trello_token)
     board_data = board_data_repository.get_board_data(board_id_to_load)
 
     puts("Calculating Cycletime metrics")
+    metrics_calculator = MetricsCalculator.new
     metrics_data = metrics_calculator.calculate_cycletime(board_data)
 
     puts("Storing metrics")
+    metrics_repository = MetricsRepository.new(orchestrate_api_key, orchestrate_collection, orchestrate_endpoint)
     metrics_repository.store_metrics(metrics_data)
 
     puts("Finalizing update and restarting process")

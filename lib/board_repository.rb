@@ -32,4 +32,8 @@ class BoardRepository
   def set_interrupted(board_id)
     @client.query("update boards set interrupted = 'Y' where board_id = '" + board_id + "'")
   end
+
+  def close
+    @client.close
+  end
 end

@@ -6,5 +6,9 @@ ruby "2.1.8"
 gem "orchestrate"
 gem "ruby-trello"
 gem "mysql2"
-gem 'rspec-core'
-gem 'rspec'
+
+group :test do
+  gem 'rspec-core'
+  gem 'rspec'
+end
+
